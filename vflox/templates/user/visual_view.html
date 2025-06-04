@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Listing - Vflox</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f6fa; margin: 0; padding: 0; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 20px; }
+        h1 { text-align: center; color: #2d3436; }
+        .filters { display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; }
+        .filters select { padding: 8px 12px; border-radius: 5px; border: 1px solid #b2bec3; }
+        .course-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .course-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.2s;
+        }
+        .course-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
+        .course-thumb { width: 100%; height: 180px; object-fit: cover; }
+        .course-content { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+        .course-title { font-size: 1.2rem; font-weight: bold; margin: 0 0 8px 0; color: #0984e3; }
+        .course-desc { color: #636e72; font-size: 0.98rem; margin-bottom: 10px; }
+        .course-meta { font-size: 0.95rem; color: #636e72; margin-bottom: 8px; }
+        .course-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+        .price { font-weight: bold; color: #00b894; }
+        .free-tag { background: #00b894; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; }
+        .rating { color: #fdcb6e; font-size: 1rem; }
+        .enrolled { color: #636e72; font-size: 0.95rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Available Courses</h1>
+        <div class="filters">
+            <select>
+                <option>All Categories</option>
+                <option>Programming</option>
+                <option>Design</option>
+                <option>Business</option>
+            </select>
+            <select>
+                <option>All Levels</option>
+                <option>Beginner</option>
+                <option>Intermediate</option>
+                <option>Professional</option>
+            </select>
+            <select>
+                <option>All Prices</option>
+                <option>Free</option>
+                <option>Paid</option>
+            </select>
+        </div>
+        <div class="course-list">
+            <!-- Example Course Card -->
+            <div class="course-card">
+                <img src="https://via.placeholder.com/400x180?text=Course+Thumbnail" alt="Course Thumbnail" class="course-thumb">
+                <div class="course-content">
+                    <div class="course-title">Python for Beginners</div>
+                    <div class="course-desc">Learn Python from scratch with hands-on projects and real-world examples.</div>
+                    <div class="course-meta">Instructor: Jane Doe</div>
+                    <div class="course-footer">
+                        <span class="rating">&#9733; 4.8</span>
+                        <span class="enrolled">1,200 students</span>
+                    </div>
+                    <div class="course-footer">
+                        <span class="free-tag">Free</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Example Paid Course Card -->
+            <div class="course-card">
+                <img src="https://via.placeholder.com/400x180?text=Course+Thumbnail" alt="Course Thumbnail" class="course-thumb">
+                <div class="course-content">
+                    <div class="course-title">Advanced Web Design</div>
+                    <div class="course-desc">Master modern web design techniques and responsive layouts.</div>
+                    <div class="course-meta">Instructor: John Smith</div>
+                    <div class="course-footer">
+                        <span class="rating">&#9733; 4.6</span>
+                        <span class="enrolled">800 students</span>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">$49.99</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Add more course cards as needed -->
+        </div>
+    </div>
+</body>
+</html>
