@@ -1,53 +1,54 @@
-from django.shortcuts import render
-from django.http import HttpRequest
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, render,redirect
+from django.http import HttpResponse,HttpRequest
+from  django.contrib.auth import authenticate,login
 from django.contrib.auth.decorators import login_required
-from .models import Course, Lesson, Enrollment, Category
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
-# create your views here.
+
+from A_Learning.vflox.models import Category, Course, Enrollment, Lesson
+
+# Create your views here.
+def homepage(request):
+    return HttpResponse("<h2 align='center style='color:grey;>'HELLO E_LEARNERS  </h2>")
+def aboutpage(request):
+    return HttpResponse("<h2 align='center' style='color:green;>' ABOUT<h2/>")
+def contactpage(request):
+    return HttpResponse("<h2 align='center' style='color:green;>' CONTACT VFLOX </h2>")
 
 def signupview(request:HttpRequest):
-    # user1 = User.objects.create_user(username="divine1",email="swissb506@gmail.com",password="di1vi2ne3")
-    # user1.save()
+    
     if request.method == "POST":
-        username= request.POST.get("username")
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        password1 = request.POST.get("password1")
-        if password != password1 or len(password) < 8:
-            return render(request,"auth/signup.html",{"error":"password do not match or minimum length of password not met"})
-        if not username or not email :
-           return render(request,"auth/signup.html",{"error":"username and email is required"}) 
-        try:
-            user_exist = User.objects.filter(username = username).first()
-            if user_exist :
-                return render(request,"auth/signup.html",{'error':"user already exist","success":None})
-            # getting to this stage means we are good to signup the user
-            user = User.objects.create_user(username=username,email=email,password=password)
-            user.save()
-            vflox = vflox.objects.create(trader=user)
-            vflox.save()
-            return render(request,"auth/signup.html",{'error':None,"success":"signup successful"})
-        except Exception as e :
-            print(e)
-    return render(request,"auth/signup.html",{'error':"Server Error","success":None})
-
-
-def loginview(request:HttpRequest):
-    # user1 = User.objects.create_user(username="divine1",email="swissb506@gmail.com",password="di1vi2ne3")
-    # user1.save()
-    if request.method == "POST":
-        username= request.POST.get("username")
-        password = request.POST.get("password")
-        user = authenticate(request,username=username,password=password)
-        print(user)
-        if user is not None:
-            login(request,user)
-            return redirect('/tradex/wallet/')
-        else :
-            return render(request,"auth/login.html",{'error':"Server Error","success":None})
+        email=request.POST.get("email")
+        username=request.POST.get("username")
+        password1=request.POST.get("password")
+        password2=request.POST.get("password1")
+        if password1 != password2 or len (password1)<8:
+            return render(request,"auth/signup.html",{"error":"password do not match or len of password is < 8"})
+        if not username :
+            return render(request,"auth/signup.html",{"error":"username required"})
+        user_found = User.objects.filter(username = username)
+        if user_found :
+            return render(request,"auth/signup.html",{"error":"User with the given username already exist"})
+        # user = User(username=username , email=email, password = password1)
+        # user.save()
+        User.objects.create_user(username=username,email=email, password=password1)
+        print('User Saved')
+        return redirect("vflox-login-page")
+    
+    print("Get request for signup called upon")   
+    return render(request,"auth/signup.html",{"error":None})
         
+def loginview(request: HttpRequest):
+    if  request.method=="POST":
+        username=request.POST.get("username")
+        pass1=request.POST.get("pass1")
+        try:
+            user = authenticate(request,username=username,password=pass1)
+            if user == None:
+                return render(request,"auth/login.html",{'error':"not a valid user"})
+            login(request, user)
+            return redirect("/vflox/homepage")
+        except:
+            return render(request,"auth/login.html",{'error':"server Error","success":None})
     return render(request,"auth/login.html",{})
 
 

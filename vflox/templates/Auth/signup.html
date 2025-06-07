@@ -49,19 +49,20 @@
     </style>
 </head>
 <body>
-  
+
 
     <div class="signup_container">
         <h2>signup</h2>
-         {% if error %} 
-             <p style ="color: red;"> {{ error }}</p> 
-         {% endif %} 
+        {% if error %}
+            <p style ="color: red;"> {{ error }}</p>
+        {% endif %} 
 
-         {% if success %} 
-             <p style="color: green;">  {{ success }}</p> 
-         {% endif %} 
+        {% if success %} 
+            <p style="color: green;">  {{ success }}</p> 
+        {% endif %} 
+        
         <form method="post">
-             {% csrf_token %} 
+            {% csrf_token %} 
             <input type="email" name="email" placeholder="email"
         required><br><br>
             <input type="text" name="username" placeholder="username"

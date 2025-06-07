@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 0; }
+        .dashboard-container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #ddd; padding: 32px; }
+        h1 { color: #2c3e50; }
+        .section { margin-bottom: 32px; }
+        .courses-list, .lessons-list, .certificates-list, .grades-table { width: 100%; border-collapse: collapse; }
+        .courses-list th, .courses-list td,
+        .grades-table th, .grades-table td { padding: 10px; border-bottom: 1px solid #eee; }
+        .progress-bar { background: #eee; border-radius: 6px; overflow: hidden; height: 18px; width: 180px; }
+        .progress { background: #4caf50; height: 100%; }
+        .badge { background: #3498db; color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 12px; }
+        .certificates-list li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Student Dashboard</h1>
+
+        <!-- Enrolled Courses -->
+        <div class="section">
+            <h2>Enrolled Courses</h2>
+            <table class="courses-list">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Progress</th>
+                        <th>Completion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Example row, replace with dynamic content -->
+                    <tr>
+                        <td>Python for Beginners</td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 70%;"></div>
+                            </div>
+                        </td>
+                        <td><span class="badge">70%</span></td>
+                    </tr>
+                    <tr>
+                        <td>Web Development Basics</td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 45%;"></div>
+                            </div>
+                        </td>
+                        <td><span class="badge">45%</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Recently Viewed Lessons -->
+        <div class="section">
+            <h2>Recently Viewed Lessons</h2>
+            <ul class="lessons-list">
+                <li>Lesson 5: Functions in Python</li>
+                <li>Lesson 2: HTML Structure</li>
+                <li>Lesson 8: CSS Flexbox</li>
+            </ul>
+        </div>
+
+        <!-- Earned Certificates -->
+        <div class="section">
+            <h2>Earned Certificates</h2>
+            <ul class="certificates-list">
+                <li>Python for Beginners - <a href="#">Download Certificate</a></li>
+                <li>Introduction to Databases - <a href="#">Download Certificate</a></li>
+            </ul>
+        </div>
+
+        <!-- Quiz Scores & Assignment Grades -->
+        <div class="section">
+            <h2>Quiz Scores & Assignment Grades</h2>
+            <table class="grades-table">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Quiz</th>
+                        <th>Score</th>
+                        <th>Assignment</th>
+                        <th>Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Python for Beginners</td>
+                        <td>Quiz 1</td>
+                        <td>85%</td>
+                        <td>Assignment 1</td>
+                        <td>A</td>
+                    </tr>
+                    <tr>
+                        <td>Web Development Basics</td>
+                        <td>Quiz 2</td>
+                        <td>78%</td>
+                        <td>Assignment 2</td>
+                        <td>B+</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

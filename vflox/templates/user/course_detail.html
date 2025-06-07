@@ -1,102 +1,148 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ course.title }} - Course Details</title>
+    <title>Course Detail - vflox</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: Arial, sans-serif; background: #f5f6fa; margin: 0; padding: 0; }
-        .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); padding: 32px; }
-        .course-header { display: flex; gap: 32px; align-items: flex-start; }
-        .course-thumb { width: 320px; height: 180px; object-fit: cover; border-radius: 8px; }
+        body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 0; }
+        .container { max-width: 1000px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #ddd; padding: 32px; }
+        .course-header { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 32px; }
+        .course-thumb { width: 320px; height: 180px; object-fit: cover; border-radius: 8px; background: #eaeaea; }
         .course-info { flex: 1; }
-        .course-title { font-size: 2rem; color: #0984e3; margin-bottom: 8px; }
-        .course-instructor { color: #636e72; margin-bottom: 8px; }
-        .course-rating { color: #fdcb6e; font-size: 1.1rem; margin-bottom: 8px; }
-        .course-price { font-weight: bold; color: #00b894; font-size: 1.2rem; margin-bottom: 8px; }
-        .free-tag { background: #00b894; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 1rem; }
-        .enroll-btn { background: #0984e3; color: #fff; padding: 10px 28px; border: none; border-radius: 5px; font-size: 1.1rem; cursor: pointer; margin-top: 12px; }
-        .enroll-btn:hover { background: #0652dd; }
+        .course-title { font-size: 2rem; font-weight: bold; color: #0984e3; margin-bottom: 8px; }
+        .course-desc { color: #636e72; font-size: 1.1rem; margin-bottom: 16px; }
+        .enroll-btn { background: #27ae60; color: #fff; padding: 12px 32px; border: none; border-radius: 6px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 12px; }
+        .enroll-btn:hover { background: #219150; }
         .section { margin-top: 36px; }
-        .section-title { font-size: 1.3rem; color: #2d3436; margin-bottom: 12px; }
-        .lesson-list { list-style: none; padding: 0; }
-        .lesson-item { padding: 10px 0; border-bottom: 1px solid #f1f2f6; display: flex; align-items: center; }
-        .preview-badge { background: #fdcb6e; color: #fff; font-size: 0.9rem; padding: 2px 8px; border-radius: 4px; margin-left: 10px; }
-        .instructor-profile { display: flex; align-items: center; gap: 16px; }
-        .instructor-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
-        .review-list { list-style: none; padding: 0; }
-        .review-item { border-bottom: 1px solid #f1f2f6; padding: 12px 0; }
-        .review-author { font-weight: bold; color: #636e72; }
-        .review-rating { color: #fdcb6e; }
+        .section h2 { color: #2c3e50; margin-bottom: 16px; }
+        .curriculum-list { list-style: none; padding: 0; margin: 0; }
+        .curriculum-list li { padding: 10px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .preview-btn { background: #0984e3; color: #fff; border: none; border-radius: 4px; padding: 4px 14px; font-size: 0.95rem; cursor: pointer; }
+        .preview-btn:hover { background: #065ea6; }
+        .instructor-profile { display: flex; align-items: center; gap: 18px; background: #f5f6fa; border-radius: 8px; padding: 18px; }
+        .instructor-avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; background: #eaeaea; }
+        .instructor-info { }
+        .instructor-name { font-weight: bold; color: #2d3436; font-size: 1.1rem; }
+        .instructor-bio { color: #636e72; font-size: 0.98rem; }
+        .reviews-list { list-style: none; padding: 0; margin: 0; }
+        .reviews-list li { padding: 12px 0; border-bottom: 1px solid #eee; }
+        .reviewer { font-weight: bold; color: #0984e3; }
+        .review-rating { color: #fdcb6e; margin-left: 8px; }
+        .review-text { color: #636e72; margin-top: 4px; }
+        @media (max-width: 700px) {
+            .container { padding: 10px; }
+            .course-header { flex-direction: column; gap: 16px; }
+            .course-thumb { width: 100%; height: 180px; }
+            .instructor-profile { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Course Header -->
         <div class="course-header">
-            <img src="{{ course.thumbnail.url }}" alt="Course Thumbnail" class="course-thumb">
+            <img src="" alt="Course Thumbnail" class="course-thumb">
             <div class="course-info">
-                <div class="course-title">{{ course.title }}</div>
-                <div class="course-instructor">Instructor: {{ instructor.get_full_name|default:instructor.username }}</div>
-                <div class="course-rating">&#9733; {{ course.rating|default:"4.8" }} ({{ course.enrollments.count }} students)</div>
-                {% if course.is_free %}
-                    <span class="free-tag">Free</span>
-                {% else %}
-                    <span class="course-price">${{ course.price }}</span>
-                {% endif %}
-                <form method="post" action="{% url 'enroll_course' course.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="enroll-btn">Enroll Now</button>
-                </form>
+                <div class="course-title">Full Stack Web Development Bootcamp</div>
+                <div class="course-desc">
+                    Master web development from scratch. Learn HTML, CSS, JavaScript, Python, Django, React, and more with hands-on projects and real-world examples.
+                </div>
+                <div>
+                    <span style="color:#fdcb6e;">&#9733;&#9733;&#9733;&#9733;&#9734; 4.5</span>
+                    <span style="color:#636e72;">(1,200 ratings) &middot; 3,500 students</span>
+                </div>
+                <button class="enroll-btn">Enroll Now</button>
             </div>
         </div>
 
+        <!-- Curriculum Overview -->
         <div class="section">
-            <div class="section-title">Course Description</div>
-            <div>{{ course.description|linebreaks }}</div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">Curriculum Overview</div>
-            <ul class="lesson-list">
-                {% for lesson in lessons %}
-                <li class="lesson-item">
-                    {{ lesson.title }}
-                    {% if lesson.is_preview %}
-                        <span class="preview-badge">Preview</span>
-                    {% endif %}
+            <h2>Curriculum Overview</h2>
+            <ul class="curriculum-list">
+                <li>
+                    Introduction to Full Stack
+                    <button class="preview-btn" onclick="previewLesson('https://www.youtube.com/embed/ENrzD9HAZK4')">Preview</button>
                 </li>
-                {% empty %}
-                <li>No lessons yet.</li>
-                {% endfor %}
+                <li>
+                    Introduction to Python
+                    <button class="preview-btn" onclick="previewLesson('https://www.youtube.com/embed/kqtD5dpn9C8')">Preview</button>
+                </li>
+                <li>
+                    Introduction to JavaScript
+                    <button class="preview-btn" onclick="previewLesson('https://www.youtube.com/embed/W6NZfCO5SIk')">Preview</button>
+                </li>
+                <li>
+                    React Components
+                    <button class="preview-btn" onclick="previewLesson('https://www.youtube.com/embed/dGcsHMXbSOA')">Preview</button>
+                </li>
+                <li>
+                    Django for Beginners
+                    <button class="preview-btn" onclick="previewLesson('https://www.youtube.com/embed/F5mRW0jo-U4')">Preview</button>
+                </li>
             </ul>
-        </div>
-
-        <div class="section">
-            <div class="section-title">Instructor Profile</div>
-            <div class="instructor-profile">
-                <img src="https://ui-avatars.com/api/?name={{ instructor.get_full_name|default:instructor.username }}" alt="Instructor" class="instructor-avatar">
-                <div>
-                    <div><strong>{{ instructor.get_full_name|default:instructor.username }}</strong></div>
-                    <div>Email: {{ instructor.email }}</div>
-                    <!-- Add more instructor info if available -->
+            <!-- Preview Modal -->
+            <div id="previewModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;z-index:1000;">
+                <div style="background:#fff;padding:20px;border-radius:8px;max-width:90vw;max-height:90vh;position:relative;">
+                    <button onclick="closePreview()" style="position:absolute;top:8px;right:12px;font-size:1.5rem;background:none;border:none;cursor:pointer;">&times;</button>
+                    <iframe id="previewFrame" width="560" height="315" src="" frameborder="0" allowfullscreen style="max-width:80vw;max-height:70vh;"></iframe>
                 </div>
             </div>
         </div>
 
+        <!-- Instructor Profile -->
         <div class="section">
-            <div class="section-title">Student Reviews</div>
-            <ul class="review-list">
-                {% for review in reviews %}
-                <li class="review-item">
-                    <div class="review-author">{{ review.user.username }}</div>
-                    <div class="review-rating">&#9733; {{ review.rating }}</div>
-                    <div>{{ review.comment }}</div>
+            <h2>Instructor</h2>  
+            <div class="instructor-profile">
+                <img src="https://via.placeholder.com/70?text=Avatar" alt="Instructor Avatar" class="instructor-avatar">
+                <div class="instructor-info">
+                    <div class="instructor-name">Nnamani Prince</div>
+                    <div class="instructor-bio">
+                        Senior Full Stack Developer with 10+ years of experience in web development, passionate about teaching and mentoring new developers.
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Reviews -->
+        <div class="section">
+            <h2>Student Reviews</h2>
+            <ul class="reviews-list">
+                <li>
+                    <span class="reviewer">James</span>
+                    <span class="review-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                    <div class="review-text">Excellent course! The instructor explains concepts very clearly.</div>
                 </li>
-                {% empty %}
-                <li>No reviews yet.</li>
-                {% endfor %}
+                <li>
+                    <span class="reviewer">Kelvin</span>
+                    <span class="review-rating">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+                    <div class="review-text">Great content, but would love more real-world projects.</div>
+                </li>
+                <li>
+                    <span class="reviewer">Peter</span>
+                    <span class="review-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                    <div class="review-text">Loved the curriculum and the hands-on approach!</div>
+                </li>
             </ul>
         </div>
     </div>
+    <script>
+        function previewLesson(url) {
+            document.getElementById('previewFrame').src = url;
+            document.getElementById('previewModal').style.display = 'flex';
+        }
+        function closePreview() {
+            document.getElementById('previewModal').style.display = 'none';
+            document.getElementById('previewFrame').src = '';
+        }
+        // Close modal on background click
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('previewModal').addEventListener('click', function(e) {
+                if (e.target === this) closePreview();
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Instructor Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 0; }
+        .dashboard-container { max-width: 1000px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #ddd; padding: 32px; }
+        h1 { color: #2c3e50; }
+        .section { margin-bottom: 32px; }
+        .courses-table, .stats-table, .reviews-table, .progress-table, .reports-table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border-bottom: 1px solid #eee; }
+        .btn { background: #3498db; color: #fff; padding: 6px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .btn-create { background: #27ae60; margin-bottom: 12px; }
+        .badge { background: #f39c12; color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 12px; }
+        .rating { color: #f1c40f; }
+        .hidden { display: none; }
+        .modal-bg {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;
+        }
+        .modal {
+            background: #fff; padding: 24px; border-radius: 8px; min-width: 320px; max-width: 90vw; position: relative;
+        }
+        .modal-close {
+            position: absolute; top: 8px; right: 12px; font-size: 1.5rem; background: none; border: none; cursor: pointer;
+        }
+        .pdf-upload-form input[type="file"] { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Instructor Dashboard</h1>
+
+        <!-- Manage Courses -->
+        <div class="section">
+            <h2>Manage Your Courses</h2>
+            <button class="btn btn-create" onclick="openCourseModal()">+ Create New Course</button>
+            <table class="courses-table" id="coursesTable">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Advanced Python</td>
+                        <td><span class="badge">Published</span></td>
+                        <td>
+                            <button class="btn">Edit</button>
+                            <button class="btn">View</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Intro to Data Science</td>
+                        <td><span class="badge" style="background:#95a5a6;">Draft</span></td>
+                        <td>
+                            <button class="btn">Edit</button>
+                            <button class="btn">Publish</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Student Enrollment Statistics -->
+        <div class="section">
+            <h2>Student Enrollment Statistics</h2>
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Enrolled Students</th>
+                        <th>Active Students</th>
+                        <th>Completion Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Advanced Python</td>
+                        <td>120</td>
+                        <td>85</td>
+                        <td>65%</td>
+                    </tr>
+                    <tr>
+                        <td>Intro to Data Science</td>
+                        <td>90</td>
+                        <td>60</td>
+                        <td>40%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Course Ratings and Reviews -->
+        <div class="section">
+            <h2>Course Ratings & Reviews</h2>
+            <table class="reviews-table">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Average Rating</th>
+                        <th>Recent Review</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Advanced Python</td>
+                        <td><span class="rating">&#9733;&#9733;&#9733;&#9733;&#9734; (4.0)</span></td>
+                        <td>"Great explanations and examples!"</td>
+                    </tr>
+                    <tr>
+                        <td>Intro to Data Science</td>
+                        <td><span class="rating">&#9733;&#9733;&#9733;&#9734;&#9734; (3.0)</span></td>
+                        <td>"Needs more practical exercises."</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Track Student Progress -->
+        <div class="section">
+            <h2>Track Student Progress</h2>
+            <table class="progress-table">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Course</th>
+                        <th>Progress</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Jane Doe</td>
+                        <td>Advanced Python</td>
+                        <td>
+                            <div class="progress-bar" style="width:180px;">
+                                <div class="progress" style="background:#4caf50;height:18px;width:80%;"></div>
+                            </div>
+                            <span class="badge" style="background:#4caf50;">80%</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>John Smith</td>
+                        <td>Intro to Data Science</td>
+                        <td>
+                            <div class="progress-bar" style="width:180px;">
+                                <div class="progress" style="background:#4caf50;height:18px;width:55%;"></div>
+                            </div>
+                            <span class="badge" style="background:#4caf50;">55%</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Generate Reports -->
+        <div class="section">
+            <h2>Course Performance Reports</h2>
+            <form class="pdf-upload-form" id="pdfForm">
+                <label for="pdfUpload">Upload PDF Report:</label>
+                <input type="file" id="pdfUpload" accept="application/pdf">
+                <button type="submit" class="btn">Upload</button>
+            </form>
+            <table class="reports-table" id="reportsTable">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Report</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Advanced Python</td>
+                        <td>Monthly Performance</td>
+                        <td><a href="#" class="btn" download>Download PDF</a></td>
+                    </tr>
+                    <tr>
+                        <td>Intro to Data Science</td>
+                        <td>Monthly Performance</td>
+                        <td><a href="#" class="btn" download>Download PDF</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal for Creating New Course -->
+    <div class="modal-bg" id="courseModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeCourseModal()">&times;</button>
+            <h2>Create New Course</h2>
+            <form id="createCourseForm">
+                <label>Course Title:</label><br>
+                <input type="text" id="newCourseTitle" required style="width:100%;padding:6px;margin-bottom:10px;"><br>
+                <label>Status:</label><br>
+                <select id="newCourseStatus" style="width:100%;padding:6px;margin-bottom:10px;">
+                    <option value="Published">Published</option>
+                    <option value="Draft">Draft</option>
+                </select><br>
+                <button type="submit" class="btn btn-create">Add Course</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal logic for creating a new course
+        function openCourseModal() {
+            document.getElementById('courseModal').style.display = 'flex';
+        }
+        function closeCourseModal() {
+            document.getElementById('courseModal').style.display = 'none';
+        }
+        document.getElementById('createCourseForm').onsubmit = function(e) {
+            e.preventDefault();
+            const title = document.getElementById('newCourseTitle').value;
+            const status = document.getElementById('newCourseStatus').value;
+            const table = document.getElementById('coursesTable').getElementsByTagName('tbody')[0];
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td>${title}</td>
+                <td><span class="badge" style="background:${status === 'Published' ? '#f39c12' : '#95a5a6'};">${status}</span></td>
+                <td>
+                    <button class="btn">Edit</button>
+                    <button class="btn">View</button>
+                </td>
+            `;
+            closeCourseModal();
+            document.getElementById('createCourseForm').reset();
+        };
+
+        // PDF upload logic (demo only, does not actually upload)
+        document.getElementById('pdfForm').onsubmit = function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('pdfUpload');
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const table = document.getElementById('reportsTable').getElementsByTagName('tbody')[0];
+                const row = table.insertRow();
+                row.innerHTML = `
+                    <td>Custom Upload</td>
+                    <td>${file.name}</td>
+                    <td><a href="#" class="btn" download="${file.name}">Download PDF</a></td>
+                `;
+                alert('PDF added to the reports table (demo only).');
+                fileInput.value = '';
+            } else {
+                alert('Please select a PDF file.');
+            }
+        };
+
+        // Modal close on background click
+        document.getElementById('courseModal').onclick = function(e) {
+            if (e.target === this) closeCourseModal();
+        };
+    </script>
+</body>
+</html>

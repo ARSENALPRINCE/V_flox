@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Course Listing - Vflox</title>
+    <title>Course Listing - vflox</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body { font-family: Arial, sans-serif; background: #f5f6fa; margin: 0; padding: 0; }
         .container { max-width: 1200px; margin: 40px auto; padding: 20px; }
-        h1 { text-align: center; color: #2d3436; }
-        .filters { display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; }
-        .filters select { padding: 8px 12px; border-radius: 5px; border: 1px solid #b2bec3; }
+        h1 { text-align: center; color: #27ae60; }
+        .filters { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-bottom: 30px; }
+        .filters select { padding: 8px 12px; border-radius: 5px; border: 1px solid #b2bec3; min-width: 160px; }
+        .filters button { padding: 8px 18px; border-radius: 4px; border: none; background: #27ae60; color: #fff; font-weight: bold; cursor: pointer; }
         .course-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
         .course-card {
             background: #fff;
@@ -31,33 +32,38 @@
         .free-tag { background: #00b894; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; }
         .rating { color: #fdcb6e; font-size: 1rem; }
         .enrolled { color: #636e72; font-size: 0.95rem; }
+        @media (max-width: 700px) {
+            .container { padding: 8px; }
+            .filters { flex-direction: column; gap: 10px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Available Courses</h1>
-        <div class="filters">
-            <select>
-                <option>All Categories</option>
-                <option>Programming</option>
-                <option>Design</option>
-                <option>Business</option>
+        <h1>Available Courses on <span style="color:#27ae60;">vflox</span></h1>
+        <form class="filters" id="filterForm">
+            <select name="category" id="category">
+                <option value="">All Categories</option>
+                <option value="programming">Programming</option>
+                <option value="design">Design</option>
+                <option value="business">Business</option>
             </select>
-            <select>
-                <option>All Levels</option>
-                <option>Beginner</option>
-                <option>Intermediate</option>
-                <option>Professional</option>
+            <select name="level" id="level">
+                <option value="">All Levels</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="professional">Professional</option>
             </select>
-            <select>
-                <option>All Prices</option>
-                <option>Free</option>
-                <option>Paid</option>
+            <select name="price" id="price">
+                <option value="">All Prices</option>
+                <option value="free">Free</option>
+                <option value="paid">Paid</option>
             </select>
-        </div>
-        <div class="course-list">
+            <button type="button" onclick="filterCourses()">Filter</button>
+        </form>
+        <div class="course-list" id="courseList">
             <!-- Example Course Card -->
-            <div class="course-card">
+            <div class="course-card" data-category="programming" data-level="beginner" data-price="free">
                 <img src="https://via.placeholder.com/400x180?text=Course+Thumbnail" alt="Course Thumbnail" class="course-thumb">
                 <div class="course-content">
                     <div class="course-title">Python for Beginners</div>
@@ -73,7 +79,7 @@
                 </div>
             </div>
             <!-- Example Paid Course Card -->
-            <div class="course-card">
+            <div class="course-card" data-category="design" data-level="intermediate" data-price="paid">
                 <img src="https://via.placeholder.com/400x180?text=Course+Thumbnail" alt="Course Thumbnail" class="course-thumb">
                 <div class="course-content">
                     <div class="course-title">Advanced Web Design</div>
@@ -88,8 +94,23 @@
                     </div>
                 </div>
             </div>
-            <!-- Add more course cards as needed -->
+            <!-- Add more course cards as needed, with appropriate data-category, data-level, data-price -->
         </div>
     </div>
+    <script>
+        function filterCourses() {
+            const category = document.getElementById('category').value;
+            const level = document.getElementById('level').value;
+            const price = document.getElementById('price').value;
+            const cards = document.querySelectorAll('.course-card');
+            cards.forEach(card => {
+                let show = true;
+                if (category && card.dataset.category !== category) show = false;
+                if (level && card.dataset.level !== level) show = false;
+                if (price && card.dataset.price !== price) show = false;
+                card.style.display = show ? 'flex' : 'none';
+            });
+        }
+    </script>
 </body>
 </html>

@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Lesson View</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    /* ...existing styles... */
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
       background: #f7f7f7;
@@ -86,61 +88,289 @@
       color: #2196f3;
       text-decoration: none;
       font-weight: bold;
+      cursor: pointer;
     }
     .lesson-links a:hover {
       text-decoration: underline;
     }
+    .lesson-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      justify-content: center;
+    }
+    .lesson-tab {
+      padding: 8px 18px;
+      border-radius: 5px;
+      border: 1px solid #2196f3;
+      background: #fff;
+      color: #2196f3;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s, color 0.2s;
+    }
+    .lesson-tab.active, .lesson-tab:hover {
+      background: #2196f3;
+      color: #fff;
+    }
+    @media (max-width: 700px) {
+      .lesson-container {
+        padding: 10px;
+        margin: 10px;
+      }
+      .video-player {
+        max-width: 100%;
+        height: auto;
+      }
+      .lesson-nav, .lesson-links, .lesson-tabs {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        text-align: center;
+      }
+      .mark-complete-btn {
+        width: 100%;
+        font-size: 1rem;
+      }
+      .discussion-section {
+        padding: 8px;
+      }
+    }
+    @media (max-width: 400px) {
+      .lesson-container {
+        padding: 2px;
+      }
+      .video-player {
+        border-radius: 4px;
+      }
+    }
   </style>
+  <script>
+    // List of lesson IDs in order
+    const lessons = ['react', 'fullstack', 'python', 'javascript'];
+
+    function showLesson(lesson) {
+      // Hide all lessons
+      document.querySelectorAll('.lesson-section').forEach(sec => sec.style.display = 'none');
+      // Remove active from all tabs
+      document.querySelectorAll('.lesson-tab').forEach(tab => tab.classList.remove('active'));
+      // Show selected lesson
+      document.getElementById(lesson).style.display = 'block';
+      // Set active tab
+      document.getElementById('tab-' + lesson).classList.add('active');
+      // Store current lesson in a data attribute for navigation
+      document.body.setAttribute('data-current-lesson', lesson);
+    }
+
+    function goToNextLesson() {
+      const current = document.body.getAttribute('data-current-lesson');
+      const idx = lessons.indexOf(current);
+      if (idx < lessons.length - 1) {
+        showLesson(lessons[idx + 1]);
+        scrollToTop();
+      }
+    }
+
+    function goToPrevLesson() {
+      const current = document.body.getAttribute('data-current-lesson');
+      const idx = lessons.indexOf(current);
+      if (idx > 0) {
+        showLesson(lessons[idx - 1]);
+        scrollToTop();
+      }
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.onload = function() {
+      showLesson('react');
+      // Add event listeners for all lesson-links
+      document.querySelectorAll('.lesson-links .prev-link').forEach(link => {
+        link.onclick = function(e) { e.preventDefault(); goToPrevLesson(); };
+      });
+      document.querySelectorAll('.lesson-links .next-link').forEach(link => {
+        link.onclick = function(e) { e.preventDefault(); goToNextLesson(); };
+      });
+      // Also for lesson-nav
+      document.querySelectorAll('.lesson-nav .prev-link').forEach(link => {
+        link.onclick = function(e) { e.preventDefault(); goToPrevLesson(); };
+      });
+      document.querySelectorAll('.lesson-nav .next-link').forEach(link => {
+        link.onclick = function(e) { e.preventDefault(); goToNextLesson(); };
+      });
+    }
+  </script>
 </head>
 <body>
   <div class="lesson-container">
-    <!-- Navigation between lessons -->
-    <div class="lesson-nav">
-      <a href="#prev">&larr; Previous Lesson</a>
-      <span>Lesson 3: React Components</span>
-      <a href="#next">Next Lesson &rarr;</a>
+    <!-- Lesson Tabs -->
+    <div class="lesson-tabs">
+      <button class="lesson-tab" id="tab-react" onclick="showLesson('react')">INTRODUCTION To REACT</button>
+      <button class="lesson-tab" id="tab-fullstack" onclick="showLesson('fullstack')">Introduction to Full Stack</button>
+      <button class="lesson-tab" id="tab-python" onclick="showLesson('python')">Introduction to Python</button>
+      <button class="lesson-tab" id="tab-javascript" onclick="showLesson('javascript')">Introduction to JavaScript</button>
     </div>
 
-    <!-- Video player or text content -->
-    <video class="video-player" controls poster="lesson-thumbnail.jpg">
-      <source src="lesson-video.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-    <!-- Or replace with text content:
-    <div class="lesson-content">
-      <h2>Lesson Title</h2>
-      <p>Lesson text content goes here...</p>
-    </div>
-    -->
-
-    <!-- Progress indicator -->
-    <div>
-      <label for="progress">Progress: 40%</label>
-      <div class="progress-bar">
-        <div class="progress" style="width: 40%;"></div>
+    <!-- React Components Lesson -->
+    <div class="lesson-section" id="react">
+      <div class="lesson-nav">
+        <a href="#" class="prev-link">&larr; Previous Lesson</a>
+        <span>Lesson 1: INTRODUCTION TO REACT</span>
+        <a href="#" class="next-link">Next Lesson &rarr;</a>
+      </div>
+      <iframe 
+        class="video-player"
+        width="100%" height="400"
+        src="https://www.youtube.com/embed/SqcY0GlETPk?si=MdZzfRSZGaxKiUCb"
+        title="INTRODUCTION TO REACT"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+      <div>
+        <label for="progress">Progress: 40%</label>
+        <div class="progress-bar">
+          <div class="progress" style="width: 40%;"></div>
+        </div>
+      </div>
+      <button class="mark-complete-btn">Mark as Complete</button>
+      <div class="discussion-section">
+        <h3>Discussion</h3>
+        <ul class="discussion-list">
+          <li><strong>Alice:</strong> Great lesson! I learned a lot.</li>
+          <li><strong>Bob:</strong> Can someone explain the difference between props and state?</li>
+        </ul>
+        <form>
+          <input type="text" placeholder="Add a comment..." style="width:70%;padding:8px;border-radius:4px;border:1px solid #ccc;">
+          <button type="submit" style="padding:8px 16px;border-radius:4px;border:none;background:#4caf50;color:#fff;margin-left:8px;">Post</button>
+        </form>
+      </div>
+      <div class="lesson-links">
+        <a href="#" class="prev-link">&larr; Previous Lesson</a>
+        <a href="#" class="next-link">Next Lesson &rarr;</a>
       </div>
     </div>
 
-    <!-- Mark as complete button -->
-    <button class="mark-complete-btn">Mark as Complete</button>
-
-    <!-- Discussion section -->
-    <div class="discussion-section">
-      <h3>Discussion</h3>
-      <ul class="discussion-list">
-        <li><strong>Alice:</strong> Great lesson! I learned a lot.</li>
-        <li><strong>Bob:</strong> Can someone explain the difference between props and state?</li>
-      </ul>
-      <form>
-        <input type="text" placeholder="Add a comment..." style="width:70%;padding:8px;border-radius:4px;border:1px solid #ccc;">
-        <button type="submit" style="padding:8px 16px;border-radius:4px;border:none;background:#4caf50;color:#fff;margin-left:8px;">Post</button>
-      </form>
+    <!-- Introduction to Full Stack Lesson -->
+    <div class="lesson-section" id="fullstack" style="display:none;">
+      <div class="lesson-nav">
+        <a href="#" class="prev-link">&larr; Previous Lesson</a>
+        <span>Lesson 2: Introduction to Full Stack</span>
+        <a href="#" class="next-link">Next Lesson &rarr;</a>
+      </div>
+      <iframe 
+        class="video-player"
+        width="100%" height="400"
+        src="https://www.youtube.com/embed/ENrzD9HAZK4"
+        title="Introduction to Full Stack"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+      <div>
+        <label for="progress">Progress: 20%</label>
+        <div class="progress-bar">
+          <div class="progress" style="width: 20%;"></div>
+        </div>
+      </div>
+      <button class="mark-complete-btn">Mark as Complete</button>
+      <div class="discussion-section">
+        <h3>Discussion</h3>
+        <ul class="discussion-list">
+          <li><strong>Mary:</strong> This gave me a good overview of full stack development!</li>
+          <li><strong>Sam:</strong> What languages should I start with for full stack?</li>
+        </ul>
+        <form>
+          <input type="text" placeholder="Add a comment..." style="width:70%;padding:8px;border-radius:4px;border:1px solid #ccc;">
+          <button type="submit" style="padding:8px 16px;border-radius:4px;border:none;background:#4caf50;color:#fff;margin-left:8px;">Post</button>
+        </form>
+      </div>
+      <div class="lesson-links">
+        <a href="#" class="prev-link">&larr; Previous Lesson</a>
+        <a href="#" class="next-link">Next Lesson &rarr;</a>
+      </div>
     </div>
 
-    <!-- Next/previous lesson links -->
-    <div class="lesson-links">
-      <a href="#prev">&larr; Previous Lesson</a>
-      <a href="#next">Next Lesson &rarr;</a>
+    <!-- Introduction to Python Lesson -->
+    <div class="lesson-section" id="python" style="display:none;">
+      <div class="lesson-nav">
+        <a href="#" class="prev-link">&larr; Previous Lesson</a>
+        <span>Lesson 3: Introduction to Python</span>
+        <a href="#" class="next-link">Next Lesson &rarr;</a>
+      </div>
+      <iframe 
+        class="video-player"
+        width="100%" height="400"
+        src="https://www.youtube.com/embed/kqtD5dpn9C8"
+        title="Introduction to Python"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+      <div>
+        <label for="progress">Progress: 10%</label>
+        <div class="progress-bar">
+          <div class="progress" style="width: 10%;"></div>
+        </div>
+      </div>
+      <button class="mark-complete-btn">Mark as Complete</button>
+      <div class="discussion-section">
+        <h3>Discussion</h3>
+        <ul class="discussion-list">
+          <li><strong>John:</strong> Python looks easy to start with!</li>
+          <li><strong>Lisa:</strong> Where can I practice Python exercises?</li>
+        </ul>
+        <form>
+          <input type="text" placeholder="Add a comment..." style="width:70%;padding:8px;border-radius:4px;border:1px solid #ccc;">
+          <button type="submit" style="padding:8px 16px;border-radius:4px;border:none;background:#4caf50;color:#fff;margin-left:8px;">Post</button>
+        </form>
+      </div>
+      <div class="lesson-links">
+        <a href="#" class="prev-link">&larr; Previous Lesson</a>
+        <a href="#" class="next-link">Next Lesson &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Introduction to JavaScript Lesson -->
+    <div class="lesson-section" id="javascript" style="display:none;">
+      <div class="lesson-nav">
+        <a href="#" class="prev-link">&larr; Previous Lesson</a>
+        <span>Lesson 4: Introduction to JavaScript</span>
+        <a href="#" class="next-link">Next Lesson &rarr;</a>
+      </div>
+      <iframe 
+        class="video-player"
+        width="100%" height="400"
+        src="https://www.youtube.com/embed/W6NZfCO5SIk"
+        title="Introduction to JavaScript"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+      <div>
+        <label for="progress">Progress: 5%</label>
+        <div class="progress-bar">
+          <div class="progress" style="width: 5%;"></div>
+        </div>
+      </div>
+      <button class="mark-complete-btn">Mark as Complete</button>
+      <div class="discussion-section">
+        <h3>Discussion</h3>
+        <ul class="discussion-list">
+          <li><strong>Mike:</strong> JavaScript seems powerful for web development!</li>
+          <li><strong>Anna:</strong> Is JavaScript only for browsers?</li>
+        </ul>
+        <form>
+          <input type="text" placeholder="Add a comment..." style="width:70%;padding:8px;border-radius:4px;border:1px solid #ccc;">
+          <button type="submit" style="padding:8px 16px;border-radius:4px;border:none;background:#4caf50;color:#fff;margin-left:8px;">Post</button>
+        </form>
+      </div>
+      <div class="lesson-links">
+        <a href="#" class="prev-link">&larr; Previous Lesson</a>
+        <a href="#" class="next-link">Next Lesson &rarr;</a>
+      </div>
     </div>
   </div>
 </body>
